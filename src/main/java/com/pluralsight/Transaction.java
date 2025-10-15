@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Transaction {
-    private id;
+    private int id;
     private LocalDate date;
     private LocalTime time;
     private String type;
@@ -71,4 +71,24 @@ public class Transaction {
     public void setDescription(String description) {
         this.description = description;
     }
+    public String toCsvLine() {
+        return String.join(",", String.valueOf(id), date.toString(), time.toString(), type, vendor.replace(",", " "),
+                amount.toPlainString(), description.replace(",", " "));
+    }
+    public static Transaction fromCsv(String line) {
+        try { String[]parts = line.split(",", -1);
+            int id = Integer.parseInt(parts[0]);
+            LocalDate date = LocalDate.parse(parts[1]);
+            LocalTime time = LocalTime.parse(parts[2]);
+            String type = parts[3];
+            String vendor = parts[4];
+            BigDecimal amount = new BigDecimal(parts[5]);
+            String description = parts[6];
+            return new Transaction(id, date, time, type, vendor, amount, description);
+        } catch (Exception e) {
+            System.err.println("Invalid CSV line: "+ line);
+            return null;
+        }
+    }
+
 }
