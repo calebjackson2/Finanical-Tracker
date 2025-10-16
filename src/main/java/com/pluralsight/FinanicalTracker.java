@@ -1,10 +1,14 @@
 package com.pluralsight;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,22 +54,34 @@ public class FinanicalTracker {
     }
 
     public static void loadTransactions(String fileName) {
-        Path path = Paths.get(fileName);
-        try {
-            if (!Files.exists(path)) {
-                Files.createFile(path);
-                System.out.println("Created new file: " + fileName);
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName)) {
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if ((line.isEmpty())) continue;
+
+                try {
+                    String[] token = line.split("\\|");
+                    if (token.length != 5) continue;
+                    LocalDate date = LocalDate.parse(token[0]);
+                    LocalTime time = LocalTime.parse(token[1]);
+                    String vendor = token[2];
+                    double amount = Double.parseDouble(token[3]);
+                    String description = token[4];
+                    transactions.add(new Transaction(date, time, vendor, amount, description));
+
+                } catch (Exception e) {
+                    System.err.println("Invalid line format: " + line);
+                }
             }
-            List<String> lines = Files.readAllLines(path);
-            for (String line : lines) {
-                if (line.isBlank()) continue;
-                Transaction t = Transaction.fromCsv(line);
-                if (t != null) transactions.add(t);
-            }
+             System.out.println("Loaded " + transactions.size() + " transactions.");
+
         } catch (IOException e) {
-            System.err.println("Error reading  file: " + e.getMessage());
+            System.err.println("Error opening file: " + e.getMessage());
+        }
     }
-}
+
     private static void addDeposit(Scanner scanner) {
         // TODO
     }
