@@ -54,7 +54,7 @@ public class FinanicalTracker {
     }
 
     public static void loadTransactions(String fileName) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName)) {
+        try { BufferedReader reader = new BufferedReader(new FileReader(fileName));
             String line;
 
             while ((line = reader.readLine()) != null) {
@@ -83,7 +83,22 @@ public class FinanicalTracker {
     }
 
     private static void addDeposit(Scanner scanner) {
-        // TODO
+        boolean adding = true;
+        while (adding) {
+            try {
+                System.out.println("Enter vendor: ");
+                String vendor = scanner.nextLine().trim();
+                System.out.println("Enter amount: ");
+                double amount = Double.parseDouble(scanner.nextLine().trim());
+                System.out.println("Enter description");
+                String description = scanner.nextLine();
+                LocalDate date = LocalDate.now();
+                LocalTime time = LocalTime.now();
+
+                transactions.add(new Transaction(date, time, vendor, amount, description));
+                System.out.println("Add another deposit? (Y/N)");
+
+        }
     }
 
     private static void addPayment(Scanner scanner) {
