@@ -96,13 +96,27 @@ public class FinanicalTracker {
                 LocalTime time = LocalTime.now();
 
                 transactions.add(new Transaction(date, time, vendor, amount, description));
-                System.out.println("Add another deposit? (Y/N)");
+                System.out.println("Deposit added successfully!");
 
+                System.out.println("Add another deposit? (Y/N)");
+                String response= scanner.nextLine().trim();
+                if (!response.equalsIgnoreCase("Y")) {
+                    adding = false;
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please try again.");
+            }
         }
     }
-
     private static void addPayment(Scanner scanner) {
-        // TODO
+        boolean adding = true;
+        while (adding) {
+            try {
+                System.out.println("Enter vendor: ");
+                String vendor = scanner.nextLine().trim();
+                System.out.println("Enter amount");
+                double amount = Double.parseDouble(Scanner)
+        }
     }
 
     private static void ledgerMenu(Scanner scanner) {
