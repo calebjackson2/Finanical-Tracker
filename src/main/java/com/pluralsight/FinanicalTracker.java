@@ -251,9 +251,9 @@ public class FinanicalTracker {
                 case "3" -> yearToDateReport();
                 case "4" -> previousYearReport();
                 case "5" -> {
-                    System.out.println("Enter vendor name: ");
+                    System.out.print("Enter vendor name: ");
                     String vendor = scanner.nextLine().trim();
-                    searchByVendor(vendor);
+                    yearToDateReport();
                 }
                 case "6" -> customSearch(scanner);
                 case "0" -> running = false;
