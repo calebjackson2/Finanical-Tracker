@@ -54,7 +54,8 @@ public class FinanicalTracker {
     }
 
     public static void loadTransactions(String fileName) {
-        try { BufferedReader reader = new BufferedReader(new FileReader(fileName));
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
             String line;
 
             while ((line = reader.readLine()) != null) {
@@ -75,7 +76,7 @@ public class FinanicalTracker {
                     System.err.println("Invalid line format: " + line);
                 }
             }
-             System.out.println("Loaded " + transactions.size() + " transactions.");
+            System.out.println("Loaded " + transactions.size() + " transactions.");
 
         } catch (IOException e) {
             System.err.println("Error opening file: " + e.getMessage());
@@ -99,7 +100,7 @@ public class FinanicalTracker {
                 System.out.println("Deposit added successfully!");
 
                 System.out.println("Add another deposit? (Y/N)");
-                String response= scanner.nextLine().trim();
+                String response = scanner.nextLine().trim();
                 if (!response.equalsIgnoreCase("Y")) {
                     adding = false;
                 }
@@ -108,6 +109,7 @@ public class FinanicalTracker {
             }
         }
     }
+
     private static void addPayment(Scanner scanner) {
         boolean adding = true;
         while (adding) {
@@ -115,7 +117,7 @@ public class FinanicalTracker {
                 System.out.println("Enter date and time (yyyy-MM-dd  HH:mm:ss): ");
                 String dateTimeInput = scanner.nextLine().trim();
                 String[] dateTimeParts = dateTimeInput.split(" ");
-                LocalDate  date = LocalDate.parse(dateTimeParts[0]);
+                LocalDate date = LocalDate.parse(dateTimeParts[0]);
                 LocalTime time = LocalTime.parse(dateTimeParts[1]);
 
                 System.out.println("Enter vendor: ");
@@ -174,7 +176,7 @@ public class FinanicalTracker {
         System.out.println("---------------------------------------------------------------------------------");
         System.out.printf("%-12s %-10s %-20s %-10s %-20s%n", "Date", "Time", "Vendor", "Amount", "Description");
         System.out.println("---------------------------------------------------------------------------------");
-        for (int i = transactions.size() - 1; i >0; i--) {
+        for (int i = transactions.size() - 1; i > 0; i--) {
             Transaction t = transactions.get(i);
             System.out.printf("%-12s %-10s %-20s %-10.2f %-20s%n",
                     t.getDate(), t.getTime(), t.getVendor(), t.getAmount(), t.getDescription());
@@ -183,7 +185,7 @@ public class FinanicalTracker {
     }
 
     private static void displayDeposits() {
-    boolean found = false;
+        boolean found = false;
         System.out.println("---------------------------------------------------------------------------------");
         System.out.printf("%-12s %-10s %-20s %-10s %-20s%n",
                 "Date", "Time", "Vendor", "Amount", "Description");
@@ -206,7 +208,7 @@ public class FinanicalTracker {
     }
 
     private static void displayPayments() {
-    boolean found = false;
+        boolean found = false;
         System.out.println("---------------------------------------------------------------------------------");
         System.out.printf("%-12s %-10s %-20s %-10s %-20s%n",
                 "Date", "Time", "Vendor", "Amount", "Description");
@@ -244,7 +246,7 @@ public class FinanicalTracker {
             String input = scanner.nextLine().trim();
 
             switch (input) {
-                case "1" ->  monthToDateReport();
+                case "1" -> monthToDateReport();
                 case "2" -> previousMonthReport();
                 case "3" -> yearToDateReport();
                 case "4" -> previousYearReport();
@@ -301,21 +303,104 @@ public class FinanicalTracker {
     }
 
     private static void customSearch(Scanner scanner) {
-        // TODO – prompt for any combination of date range, description,
-        //        vendor, and exact amount, then display matches
+        System.out.print("Enter start date (YYYY-MM-DD) or leave blank: ");
+        String startInput = scanner.nextLine().trim();
+        LocalDate start = startInput.isEmpty() ? LocalDate.MIN : parseDate(startInput);
+
+        System.out.print("Enter end date (YYYY-MM-DD) or leave blank: ");
+        String endInput = scanner.nextLine().trim();
+        LocalDate end = endInput.isEmpty() ? LocalDate.MAX : parseDate(endInput);
+
+        System.out.print("Enter vendor name (optional): ");
+        String vendor = scanner.nextLine().trim();
+
+        System.out.print("Enter description keyword (optional): ");
+        String description = scanner.nextLine().trim();
+
+        System.out.print("Enter exact amount (optional): ");
+        String amountInput = scanner.nextLine().trim();
+        Double amount = amountInput.isEmpty() ? null : parseDouble(amountInput);
+
+        boolean found = false;
+        System.out.println("---------------------------------------------------------------------------------");
+        System.out.printf("%-12s %-10s %-20s %-10s %-20s%n",
+                "Date", "Time", "Vendor", "Amount", "Description");
+        System.out.println("---------------------------------------------------------------------------------");
+
+        for (Transaction t : transactions) {
+            boolean match = true;
+
+            if (start != null && end != null) {
+                if (t.getDate().isBefore(start) || t.getDate().isAfter(end)) match = false;
+            }
+            if (!vendor.isEmpty() && !t.getVendor().equalsIgnoreCase(vendor)) match = false;
+            if (!description.isEmpty() && !t.getDescription().toLowerCase().contains(description.toLowerCase()))
+                match = false;
+            if (amount != null && t.getAmount() != amount) match = false;
+            if (match) {
+                found = true;
+                System.out.printf("%-12s %-10s %-20s %-10.2f %-20s%n",
+                        t.getDate(), t.getTime(), t.getVendor(), t.getAmount(), t.getDescription());
+            }
+        }
+
+        if (!found) System.out.println("No transactions match your criteria.");
+        System.out.println("---------------------------------------------------------------------------------\n");
     }
 
     /* ------------------------------------------------------------------
                    Utility parsers (you can reuse in many places)
                    ------------------------------------------------------------------ */
     private static LocalDate parseDate(String s) {
-        /* TODO – return LocalDate or null */
-        return null;
+        try {
+            return LocalDate.parse(s);
+        } catch (Exception e) {
+            System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+            return null;
+        }
     }
 
     private static Double parseDouble(String s) {
-        /* TODO – return Double   or null */
-        return null;
+        try {
+            return Double.parseDouble(s);
+        } catch (Exception e) {
+            System.out.println("Invalid number format.");
+            return null;
+        }
+    }
+
+    private static void monthToDateReport() {
+        LocalDate today = LocalDate.now();
+        LocalDate startOfMonth = today.withDayOfMonth(1);
+
+        System.out.println("\n--- Month To Date Report (" + startOfMonth + " to " + today + ") ---");
+        filterTransactionsByDate(startOfMonth, today);
+    }
+
+    private static void previousMonthReport() {
+        LocalDate today = LocalDate.now();
+        LocalDate startOfPreviousMonth = today.minusMonths(1).withDayOfMonth(1);
+        LocalDate endOfPreviousMonth = startOfPreviousMonth.withDayOfMonth(startOfPreviousMonth.lengthOfMonth());
+
+        System.out.println("\n--- Previous Month Report (" + startOfPreviousMonth + " to " + endOfPreviousMonth + ") ---");
+        filterTransactionsByDate(startOfPreviousMonth, endOfPreviousMonth);
+    }
+
+    private static void yearToDateReport() {
+        LocalDate today = LocalDate.now();
+        LocalDate startOfYear = today.withDayOfYear(1);
+
+        System.out.println("\n--- Year To Date Report (" + startOfYear + " to " + today + ") ---");
+        filterTransactionsByDate(startOfYear, today);
+    }
+
+    private static void previousYearReport() {
+        LocalDate today = LocalDate.now();
+        LocalDate startOfPreviousYear = today.minusYears(1).withDayOfYear(1);
+        LocalDate endOfPreviousYear = startOfPreviousYear.withDayOfYear(startOfPreviousYear.lengthOfYear());
+
+        System.out.println("\n--- Previous Year Report (" + startOfPreviousYear + " to " + endOfPreviousYear + ") ---");
+        filterTransactionsByDate(startOfPreviousYear, endOfPreviousYear);
     }
 }
 
