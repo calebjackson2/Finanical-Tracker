@@ -112,10 +112,32 @@ public class FinanicalTracker {
         boolean adding = true;
         while (adding) {
             try {
+                System.out.println("Enter date and time (yyyy-MM-dd  HH:mm:ss): ");
+                String dateTimeInput = scanner.nextLine().trim();
+                String[] dateTimeParts = dateTimeInput.split(" ");
+                LocalDate  date = LocalDate.parse(dateTimeParts[0]);
+                LocalTime time = LocalTime.parse(dateTimeParts[1]);
+
                 System.out.println("Enter vendor: ");
                 String vendor = scanner.nextLine().trim();
-                System.out.println("Enter amount");
-                double amount = Double.parseDouble(Scanner)
+                System.out.println("Enter amount: ");
+                double amount = Double.parseDouble(scanner.nextLine().trim());
+                if (amount > 0) amount = -amount;
+
+                System.out.println("Enter description: ");
+                String description = scanner.nextLine().trim();
+
+                transactions.add(new Transaction(date, time, vendor, amount, description));
+                System.out.println("Payments added successfully!");
+                System.out.println("add another payments? ");
+                String response = scanner.nextLine().trim();
+                if (!response.equalsIgnoreCase("Y")) {
+                    adding = false;
+                }
+
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please try again.");
+            }
         }
     }
 
