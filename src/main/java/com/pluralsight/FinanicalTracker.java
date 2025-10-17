@@ -165,9 +165,41 @@ public class FinanicalTracker {
         }
     }
 
-    private static void displayLedger() { /* TODO – print all transactions in column format */ }
+    private static void displayLedger() {
+        if (transactions.isEmpty()) {
+            System.out.println("No transactions to display.\n");
+            return;
+        }
 
-    private static void displayDeposits() { /* TODO – only amount > 0               */ }
+        System.out.println("---------------------------------------------------------------------------------");
+        System.out.printf("%-12s %-10s %-20s %-10s %-20s%n", "Date", "Time", "Vendor", "Amount", "Description");
+        System.out.println("---------------------------------------------------------------------------------");
+        for (int i = transactions.size() - 1; i >0; i--) {
+            Transaction t = transactions.get(i);
+            System.out.printf("%-12s %-10s %-20s %-10.2f %-20s%n",
+                    t.getDate(), t.getTime(), t.getVendor(), t.getAmount(), t.getDescription());
+        }
+        System.out.println("-----------------------------------------------------------------------\n");
+    }
+}
+
+    private static void displayDeposits() {
+    boolean found = false;
+        System.out.println("No transactions to display.\n");
+        return;
+    }
+
+        System.out.println("---------------------------------------------------------------------------------");
+        System.out.printf("%-12s %-10s %-20s %-10s %-20s%n", "Date", "Time", "Vendor", "Amount", "Description");
+        System.out.println("---------------------------------------------------------------------------------");
+        for (int i = transactions.size() - 1; i >0; i--) {
+            Transaction t = transactions.get(i);
+            System.out.printf("%-12s %-10s %-20s %-10.2f %-20s%n",
+                    t.getDate(), t.getTime(), t.getVendor(), t.getAmount(), t.getDescription());
+        }
+        System.out.println("-----------------------------------------------------------------------\n");
+    }
+}}
 
     private static void displayPayments() { /* TODO – only amount < 0               */ }
 
