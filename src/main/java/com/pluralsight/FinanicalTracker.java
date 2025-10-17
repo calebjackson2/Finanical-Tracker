@@ -181,7 +181,6 @@ public class FinanicalTracker {
         }
         System.out.println("-----------------------------------------------------------------------\n");
     }
-}
 
     private static void displayDeposits() {
     boolean found = false;
@@ -199,14 +198,35 @@ public class FinanicalTracker {
                         t.getDate(), t.getTime(), t.getVendor(), t.getAmount(), t.getDescription());
             }
         }
-
         if (!found) {
             System.out.println("No deposits found.");
         }
 
         System.out.println("-----------------------------------------------------------------------\n");
     }
-    private static void displayPayments() { /* TODO – only amount < 0               */ }
+
+    private static void displayPayments() {
+    boolean found = false;
+        System.out.println("---------------------------------------------------------------------------------");
+        System.out.printf("%-12s %-10s %-20s %-10s %-20s%n",
+                "Date", "Time", "Vendor", "Amount", "Description");
+        System.out.println("---------------------------------------------------------------------------------");
+
+        for (int i = FinanicalTracker.transactions.size() - 1; i >= 0; i--) {
+            Transaction t = FinanicalTracker.transactions.get(i);
+
+            if (t.getAmount() > 0) {
+                found = true;
+                System.out.printf("%-12s %-10s %-20s %-10.2f %-20s%n",
+                        t.getDate(), t.getTime(), t.getVendor(), t.getAmount(), t.getDescription());
+            }
+        }
+        if (!found) {
+            System.out.println("No payments found.");
+        }
+
+        System.out.println("-----------------------------------------------------------------------\n");
+    }
 
     private static void reportsMenu(Scanner scanner) {
         boolean running = true;
@@ -224,19 +244,40 @@ public class FinanicalTracker {
             String input = scanner.nextLine().trim();
 
             switch (input) {
-                case "1" -> {/* TODO – month-to-date report */ }
-                case "2" -> {/* TODO – previous month report */ }
-                case "3" -> {/* TODO – year-to-date report   */ }
-                case "4" -> {/* TODO – previous year report  */ }
-                case "5" -> {/* TODO – prompt for vendor then report */ }
+                case "1" ->  monthToDateReport();
+                case "2" -> previousMonthReport();
+                case "3" -> yearToDateReport();
+                case "4" -> previousYearReport();
+                case "5" -> {
+                    System.out.println("Enter vendor name: ");
+                    String vendor = scanner.nextLine().trim();
+                    searchByVendor(vendor);
+                }
                 case "6" -> customSearch(scanner);
                 case "0" -> running = false;
                 default -> System.out.println("Invalid option");
             }
         }
     }
+
     private static void filterTransactionsByDate(LocalDate start, LocalDate end) {
-        // TODO – iterate transactions, print those within the range
+        boolean found = false;
+        System.out.println("--------------------------------------------------------------------------------");
+        System.out.printf("%-12s %-10s %-20s %-10s %-20s%n",
+                "Date", "Time", "Vendor", "Amount", "Description");
+        System.out.println("--------------------------------------------------------------------------------");
+        for (Transaction t : transactions) {
+            LocalDate date = t.getDate();
+            if ((date.isEqual(start) || date.isAfter(start)) &&
+                    (date.isEqual(end) || date.isBefore(end))) {
+                found = true;
+                System.out.printf("%-12s %-10s %-20s %-10.2f %-20s%n",
+                        t.getDate(), t.getTime(), t.getVendor(), t.getAmount(), t.getDescription());
+            }
+        }
+
+        if (!found) System.out.println("No transactions found in that date range.");
+        System.out.println("--------------------------------------------------------------------------------\n");
     }
 
     private static void filterTransactionsByVendor(String vendor) {
@@ -249,8 +290,8 @@ public class FinanicalTracker {
     }
 
     /* ------------------------------------------------------------------
-       Utility parsers (you can reuse in many places)
-       ------------------------------------------------------------------ */
+               Utility parsers (you can reuse in many places)
+               ------------------------------------------------------------------ */
     private static LocalDate parseDate(String s) {
         /* TODO – return LocalDate or null */
         return null;
