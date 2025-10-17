@@ -185,22 +185,27 @@ public class FinanicalTracker {
 
     private static void displayDeposits() {
     boolean found = false;
-        System.out.println("No transactions to display.\n");
-        return;
-    }
+        System.out.println("---------------------------------------------------------------------------------");
+        System.out.printf("%-12s %-10s %-20s %-10s %-20s%n",
+                "Date", "Time", "Vendor", "Amount", "Description");
+        System.out.println("---------------------------------------------------------------------------------");
 
-        System.out.println("---------------------------------------------------------------------------------");
-        System.out.printf("%-12s %-10s %-20s %-10s %-20s%n", "Date", "Time", "Vendor", "Amount", "Description");
-        System.out.println("---------------------------------------------------------------------------------");
-        for (int i = transactions.size() - 1; i >0; i--) {
-            Transaction t = transactions.get(i);
-            System.out.printf("%-12s %-10s %-20s %-10.2f %-20s%n",
-                    t.getDate(), t.getTime(), t.getVendor(), t.getAmount(), t.getDescription());
+        for (int i = FinanicalTracker.transactions.size() - 1; i >= 0; i--) {
+            Transaction t = FinanicalTracker.transactions.get(i);
+
+            if (t.getAmount() > 0) {
+                found = true;
+                System.out.printf("%-12s %-10s %-20s %-10.2f %-20s%n",
+                        t.getDate(), t.getTime(), t.getVendor(), t.getAmount(), t.getDescription());
+            }
         }
+
+        if (!found) {
+            System.out.println("No deposits found.");
+        }
+
         System.out.println("-----------------------------------------------------------------------\n");
     }
-}}
-
     private static void displayPayments() { /* TODO – only amount < 0               */ }
 
     private static void reportsMenu(Scanner scanner) {
