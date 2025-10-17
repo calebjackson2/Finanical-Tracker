@@ -281,7 +281,23 @@ public class FinanicalTracker {
     }
 
     private static void filterTransactionsByVendor(String vendor) {
-        // TODO – iterate transactions, print those with matching vendor
+        boolean found = false;
+
+        System.out.println("---------------------------------------------------------------------------------");
+        System.out.printf("%-12s %-10s %-20s %-10s %-20s%n",
+                "Date", "Time", "Vendor", "Amount", "Description");
+        System.out.println("---------------------------------------------------------------------------------");
+
+        for (Transaction t : transactions) {
+            if (t.getVendor().equalsIgnoreCase(vendor)) {
+                found = true;
+                System.out.printf("%-12s %-10s %-20s %-10.2f %-20s%n",
+                        t.getDate(), t.getTime(), t.getVendor(), t.getAmount(), t.getDescription());
+            }
+        }
+
+        if (!found) System.out.println("No transactions found for vendor: " + vendor);
+        System.out.println("---------------------------------------------------------------------------------\n");
     }
 
     private static void customSearch(Scanner scanner) {
@@ -290,8 +306,8 @@ public class FinanicalTracker {
     }
 
     /* ------------------------------------------------------------------
-               Utility parsers (you can reuse in many places)
-               ------------------------------------------------------------------ */
+                   Utility parsers (you can reuse in many places)
+                   ------------------------------------------------------------------ */
     private static LocalDate parseDate(String s) {
         /* TODO – return LocalDate or null */
         return null;
