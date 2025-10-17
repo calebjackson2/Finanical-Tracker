@@ -1,15 +1,14 @@
-# Project Title
+Financial Tracker Console Application
 
 ## Description of the Project
-
-Briefly describe what this Java console application does. Mention its purpose and who the intended users are. Explain the main functionality and what problems it aims to solve.
-
+This application allows users to track their personal finances by recording deposits and payments. It provides a clear ledger of all transactions, along with reports filtered by date ranges or specific vendors. 
+The main functionality includes adding deposits and payments, viewing the ledger, and generating pre-defined and custom financial reports.
 ## User Stories
-
-List the user stories that guided the development of your application. Format these stories as: "As a [type of user], I want [some goal] so that [some reason]."
-
 - As a user, I want to be able to input my data, so that the application can process it accordingly.
 - As a user, I want to receive immediate feedback, so I can understand what to do next.
+- As a user, I want to add deposits and payments, so that I can keep track of my financial transactions.
+- As a user, I want to view all transactions in a ledger, so that I can monitor my financial activity.
+- As a user, I want to generate reports for specific time periods, so I can analyze my financial trends.
 
 ## Setup
 
@@ -45,7 +44,11 @@ Include screenshots or GIFs that show your application in action. Use tools like
 
 Outline potential future enhancements or functionalities you might consider adding:
 
-- Additional feature to be developed.
+- Add the ability to categorize transactions (e.g., groceries, bills, entertainment). 
+- Export reports to CSV or PDF for external use. 
+- Add password protection or user authentication. 
+- Integrate charts for visual financial analysis. 
+- Implement recurring transactions to automate common deposits or payments.
 - Improvement of current functionalities.
 
 ## Resources
@@ -56,13 +59,10 @@ List resources such as tutorials, articles, or documentation that helped you dur
 - [Effective Java](https://www.example.com)
 
 ## Team Members
-
-- **Name 1** - Specific contributions or roles.
-- **Name 2** - Specific contributions or roles.
-
+Caleb Jackson
 ## Thanks
 
 Express gratitude towards those who provided help, guidance, or resources:
 
-- Thank you to [Mentor's Name] for continuous support and guidance.
+- Thank you to Raymond for continuous support and guidance.
 - A special thanks to all teammates for their dedication and teamwork.
