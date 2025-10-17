@@ -57,7 +57,11 @@ public class FinanicalTracker {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
             String line;
-
+            File file = new File(FILE_NAME);
+            if (!file.exists()) {
+                file.createNewFile();
+                return;
+            }
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
                 if ((line.isEmpty())) continue;
