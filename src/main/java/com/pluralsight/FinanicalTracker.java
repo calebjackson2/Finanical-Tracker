@@ -71,9 +71,9 @@ public class FinanicalTracker {
                     if (token.length != 5) continue;
                     LocalDate date = LocalDate.parse(token[0]);
                     LocalTime time = LocalTime.parse(token[1]);
-                    String vendor = token[2];
-                    double amount = Double.parseDouble(token[3]);
-                    String description = token[4];
+                    String description = token[2];
+                    String vendor = token[3];
+                    double amount = Double.parseDouble(token[4]);
                     transactions.add(new Transaction(date, time, vendor, amount, description));
 
                 } catch (Exception e) {
